@@ -1,22 +1,25 @@
-require("dotenv").config();
 const express = require('express');
 const router = express.Router();
+
 const { Pool } = require("pg");
 
-const connectionString = process.env.DATABASE_URL || "postgres://abttqpkzhupxgl:82a518aa850c1c993bed4b26d34573720194fd3e622af579d1ad9cdca98bde30@ec2-3-211-6-217.compute-1.amazonaws.com:5432/dbefpu159nrtbj";
+const connectionString = "postgres://abttqpkzhupxgl:82a518aa850c1c993bed4b26d34573720194fd3e622af579d1ad9cdca98bde30@ec2-3-211-6-217.compute-1.amazonaws.com:5432/dbefpu159nrtbj";
 
-const pool = new Pool(
-  connectionString
-    ? { connectionString, ssl: { rejectUnauthorized: false }, log: console.log }
-    : undefined
-);
+const db = new Pool({
+  connectionString,
+  ssl: { 
+    rejectUnauthorized: false 
+  },
+  log: console.log 
+});
 
 
 // Login user.
 router.post('/login', async function(req, res, next) {
-  db.any("SELECT * FROM ajedrez.users WHERE username = $1", req.body.username)
-    .then(function (data) {
-      console.log("user:", data);
+  db.query("SELECT * FROM ajedrez.users WHERE username = $1", [req.body.username])
+    .then(function (response) {
+      const data = response.rows;
+      console.log("/login", data);
       if (!data.length) { // If the username was not found.
         res.send({
           success: false,
@@ -49,9 +52,9 @@ router.post('/login', async function(req, res, next) {
 
 // Signup user.
 router.post('/signup', async function(req, res, next) {
-  db.any("INSERT INTO ajedrez.users(name, level, type, username, password) VALUES ($1, $2, $3, $4, $5)", [req.body.name, req.body.userLevel, req.body.userType, req.body.username, req.body.password])
+  db.query("INSERT INTO ajedrez.users(name, level, type, username, password) VALUES ($1, $2, $3, $4, $5)", [req.body.name, req.body.userLevel, req.body.userType, req.body.username, req.body.password])
     .then(function (data) {
-        console.log("user:", data);
+        console.log("/signup", data);
         res.send(data);
     })
     .catch(function (error) {
@@ -66,7 +69,7 @@ router.post('/signup', async function(req, res, next) {
 
 // Delete user.
 router.delete('/users/delete', async function(req, res, next) {
-  await db.any("DELETE FROM ajedrez.users WHERE id = $1", [req.body.idUser]);
+  await db.query("DELETE FROM ajedrez.users WHERE id = $1", [req.body.idUser]);
   res.send({
     success: true,
     content: null,
@@ -76,12 +79,38 @@ router.delete('/users/delete', async function(req, res, next) {
 
 // Get users.
 router.post('/users', async function(req, res, next) {
-  res.send(await db.query("SELECT * FROM ajedrez.users WHERE id <> $1", [req.body.idUser]));
+  db.query("SELECT * FROM ajedrez.users WHERE id <> $1", [req.body.idUser])
+    .then(function (response) {
+        const data = response.rows;
+        console.log("/users", data);
+        res.send(data);
+    })
+    .catch(function (error) {
+        console.log("ERROR:", error);
+        res.send({
+          success: false,
+          content: null,
+          message: 'Ocurrió un error.'
+        });
+    });
 });
 
 // Get challenge by user.
 router.post('/challenges', async function(req, res, next) {
-  res.send(await db.query("select c.id, c.challenge_date, c.is_played, c.winner_name, u1.name as user1_name, u1.id as user1_id, u2.name as user2_name, u2.id as user2_id from ajedrez.challenges c inner join ajedrez.users u1 on u1.id = c.user_id1 inner join ajedrez.users u2 on u2.id = c.user_id2 where c.user_id1 = $1 OR c.user_id2 = $1 order by c.challenge_date asc", [req.body.idUser]));
+  db.query("select c.id, c.challenge_date, c.is_played, c.winner_name, u1.name as user1_name, u1.id as user1_id, u2.name as user2_name, u2.id as user2_id from ajedrez.challenges c inner join ajedrez.users u1 on u1.id = c.user_id1 inner join ajedrez.users u2 on u2.id = c.user_id2 where c.user_id1 = $1 OR c.user_id2 = $1 order by c.challenge_date asc", [req.body.idUser])
+    .then(function (response) {
+        const data = response.rows;
+        console.log("/challenges", data);
+        res.send(data);
+    })
+    .catch(function (error) {
+        console.log("ERROR:", error);
+        res.send({
+          success: false,
+          content: null,
+          message: 'Ocurrió un error.'
+        });
+    });
 });
 
 // Challenge playing.
@@ -116,9 +145,9 @@ router.put('/user-edit', async function(req, res, next) {
 
 // Challenge users.
 router.post('/challenge-user', async function(req, res, next) {
-  db.any("INSERT INTO ajedrez.challenges(user_id1, user_id2, challenge_date) VALUES ($1, $2, $3)", [req.body.idUserChallenger, req.body.idUserOponent, req.body.challengeDate])
+  db.query("INSERT INTO ajedrez.challenges(user_id1, user_id2, challenge_date) VALUES ($1, $2, $3)", [req.body.idUserChallenger, req.body.idUserOponent, req.body.challengeDate])
     .then(function (data) {
-        console.log("data:", data);
+        console.log("/challenge-user", data);
         res.send({
           success: true,
           content: null,

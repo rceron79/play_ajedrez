@@ -82,7 +82,7 @@
 
             await getChallengesByUser(idUser);
 
-            // If user is not logged, redirect to login.
+            // If user is not logged, redirect to login. Protected routes
             if (userType == 'null') {
                 window.location.replace("/login");
                 return;

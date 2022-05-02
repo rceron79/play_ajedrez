@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { Pool } = require("pg");
 
-const connectionString = process.env.DATABASE_URL || "postgres://abttqpkzhupxgl:82a518aa850c1c993bed4b26d34573720194fd3e622af579d1ad9cdca98bde30@ec2-3-211-6-217.compute-1.amazonaws.com:5432/dbefpu159nrtbj",
+const connectionString = process.env.DATABASE_URL || "postgres://abttqpkzhupxgl:82a518aa850c1c993bed4b26d34573720194fd3e622af579d1ad9cdca98bde30@ec2-3-211-6-217.compute-1.amazonaws.com:5432/dbefpu159nrtbj";
 
 const pool = new Pool(
   connectionString

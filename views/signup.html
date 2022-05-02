@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Ajedrez</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    </head>
+<body style="justify-content: center; display: flex; align-items: center; padding-top: 40px; padding-bottom: 40px; background-color: #f5f5f5; text-align: center!important;">
+    <main class="form-signin">
+        <div>
+            <img src="/static/images/logo.png" style="width: 150px; margin-bottom: 20px;" alt="">
+            <br>
+            <h1 class="h3 mb-3 fw-normal">Registrarse</h1>
+        
+            <div class="form-floating">
+                <input type="name" class="form-control" id="name" placeholder="Usuario">
+                <label for="username">Nombre</label>
+            </div>
+            <br>
+            <div class="form-floating">
+                <span for="username">Nivel de jugador</span>
+                <select id="user-level" class="form-select" aria-label="Nivel de jugador">
+                    <option value="Novato" selected>Novato</option>
+                    <option value="Experto">Experto</option>
+                </select>
+            </div>
+            <br>
+            <div class="form-floating">
+                <input type="username" class="form-control" id="username" placeholder="Usuario">
+                <label for="username">Usuario</label>
+            </div>
+            <br>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="password" placeholder="Contraseña">
+                <label for="password">Contraseña</label>
+            </div>
+
+            <hr>
+            <button id="signup-confirm-button" class="w-100 btn btn-lg btn-primary">Guardar</button>
+        </div>
+    </main>
+
+    <script>
+        $( document ).ready(function() {
+            const userType = localStorage.getItem('userType');
+            if (userType != 'null') {
+                window.location.replace("/users");
+                return;
+            }
+            $("#signup-confirm-button").on( "click", function() {
+                $.ajax({
+                type: "POST",
+                url: '/api/signup',
+                data: {
+                    name: $("#name").val(),
+                    userType: "normal",
+                    userLevel: $("#user-level").val(),
+                    username: $("#username").val(),
+                    password: $("#password").val(),
+                },
+                success: function (data) {
+                    window.location.href = "/login";
+                },
+            });
+            });
+    
+        });
+    </script>
+</body>
+</html>

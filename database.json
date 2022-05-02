@@ -1,0 +1,13 @@
+{
+    "defaultEnv": "local",
+    "local": {
+        "driver": "pg",
+        "user": "mdgxpyalxzoerk",
+        "password": "5447e57361282fda2d684d578065a848d56651f9259e9bc2dfaca381c7bb623a",
+        "host": "ec2-3-217-113-25.compute-1.amazonaws.com",
+        "database": "d79qf6f233hpkq",
+        "port": "5432",
+        "schema": "ajedrez",
+        "ssl": "true"
+    }
+  }

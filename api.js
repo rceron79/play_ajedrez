@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pgp = require("pg-promise")(/*options*/);
-const db = pgp("postgres://mdgxpyalxzoerk:5447e57361282fda2d684d578065a848d56651f9259e9bc2dfaca381c7bb623a@ec2-3-217-113-25.compute-1.amazonaws.com:5432/d79qf6f233hpkq");
+//const db = pgp("postgres://mdgxpyalxzoerk:5447e57361282fda2d684d578065a848d56651f9259e9bc2dfaca381c7bb623a@ec2-3-217-113-25.compute-1.amazonaws.com:5432/d79qf6f233hpkq");
 
 // Login user.
 router.post('/login', async function(req, res, next) {

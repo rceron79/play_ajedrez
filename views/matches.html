@@ -84,7 +84,7 @@
 
             // If user is not logged, redirect to login. Protected routes
             if (userType == 'null') {
-                window.location.replace("/login");
+                window.location.replace("/");
                 return;
             }
 
@@ -97,7 +97,7 @@
                 localStorage.setItem('userType', null);
 
                 // Redirect to login.
-                window.location.href = "/login";
+                window.location.href = "/";
             });
 
             // Choose the winner of the match.

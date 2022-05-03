@@ -141,14 +141,14 @@
             
             await getUsers(idUser, userLevel);
 
-            // If user is not logged, redirect to login.
+            // If user is not logged, redirect to login. Protected routes
             if (userType == 'null') {
-                window.location.replace("/login");
+                window.location.replace("/");
                 return;
             }
 
-            // If user is admin, can edit and delete other users. Protected routes
-            if (userType === "admin") {
+            // If user is admin, can edit and delete other users. 
+            if (userType == "admin") {
                 $(".edit-user-button").css("display", "contents");
                 $(".delete-user-button").css("display", "contents");
             }
@@ -162,7 +162,7 @@
                 localStorage.setItem('userType', null);
 
                 // Redirect to login.
-                window.location.href = "/login";
+                window.location.href = "/";
             });
 
             // When click exit.
@@ -173,7 +173,7 @@
                 challengeModal.show()
             });
 
-            // When click exit.
+            // When click exit. Edit    
             $("#confirm-edit-button").on( "click", function() {
                 $.ajax({
                   type: "PUT",

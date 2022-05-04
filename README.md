@@ -10,4 +10,4 @@
 
 ## Pagina
 
-Puedes ingresar a la siguiente ruta [markdown.es](https://app-ajedrez1.herokuapp.com/)
+Puedes ingresar a la siguiente ruta [https://app-ajedrez1.herokuapp.com/]
